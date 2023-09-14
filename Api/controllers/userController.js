@@ -41,7 +41,8 @@ export const getSingleUser = asyncHandler(async (req, res) => {
  * @ROUTE /api/v1/user
  * @method POST
  * @access public
- */
+ */ 
+// this create user only admin can create a user
 export const createUser = asyncHandler(async (req, res) => {
   const { name, email, mobile, password, gender } = req.body;
 

@@ -8,9 +8,13 @@ import './assets/css/select2.min.css';
 import './assets/plugins/datatables/datatables.min.css';
 import './assets/css/style.css';
 import './index.css'
+import { Provider } from 'react-redux';
+import createStore from './Redux/App/store.js';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+    <Provider store={createStore}>
     <App />
+    </Provider>
   </React.StrictMode>,
 )

@@ -1,7 +1,74 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import white_logo from "../../assets/img/logo-white.png"
+import white_logo from "../../assets/img/logo-white.png";
+import { useDispatch, useSelector } from "react-redux";
+import { userRegisterSlice } from "../../Redux/Features/auth/authApiSlice";
+import { sweetAlertStandard } from "../../helper/sweetAlert.js";
+import { createToast } from "../../utils/createToast";
+import { setMessageEmpty } from "../../Redux/Features/auth/authSlice";
 const Register = () => {
+  // call use dispatch foe data fetching with axios
+  const dispatch = useDispatch();
+  const { error, message } = useSelector((state) => state.auth);
+  // get input field data
+  const [input, setInput] = useState({
+    email: "",
+    password: "",
+    name: "",
+    cpassword: "",
+  });
+
+  // confirm get input data and ready to send server
+  const handleInputChange = (e) => {
+    setInput((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  // now submit form for sending data to server
+  const handleSubmitRegForm = (e) => {
+    e.preventDefault();
+
+    if (!input.name || !input.email || !input.password || !input.cpassword) {
+      sweetAlertStandard(
+        { title: "Heads Up!", msg: "all fields are required" },
+        "warning"
+      );
+    }
+    if (input.password !== input.cpassword) {
+      sweetAlertStandard(
+        { title: "Check password", msg: "Password not match" },
+        "info"
+      );
+    } else {
+      dispatch(
+        userRegisterSlice({
+          name: input.name,
+          email: input.email,
+          password: input.password,
+        }),
+
+        setInput({
+          email: "",
+          password: "",
+          name: "",
+          cpassword: "",
+        })
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (error) {
+      createToast(error);
+      dispatch(setMessageEmpty());
+    }
+    if (message) {
+      createToast(message);
+      dispatch(setMessageEmpty());
+    }
+  }, [error, message]);
   return (
     <>
       {/* <!-- Main Wrapper --> */}
@@ -18,12 +85,15 @@ const Register = () => {
                   <p className="account-subtitle">Access to our dashboard</p>
 
                   {/* <!-- Form --> */}
-                  <form action="https://dreamguys.co.in/demo/doccure/admin/login.html">
+                  <form onSubmit={handleSubmitRegForm}>
                     <div className="form-group">
                       <input
                         className="form-control"
                         type="text"
                         placeholder="Name"
+                        name="name"
+                        value={input.name}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="form-group">
@@ -31,6 +101,9 @@ const Register = () => {
                         className="form-control"
                         type="text"
                         placeholder="Email"
+                        name="email"
+                        value={input.email}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="form-group">
@@ -38,6 +111,9 @@ const Register = () => {
                         className="form-control"
                         type="text"
                         placeholder="Password"
+                        name="password"
+                        value={input.password}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="form-group">
@@ -45,10 +121,16 @@ const Register = () => {
                         className="form-control"
                         type="text"
                         placeholder="Confirm Password"
+                        name="cpassword"
+                        value={input.cpassword}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="form-group mb-0">
-                      <button className="btn btn-primary btn-block" type="submit">
+                      <button
+                        className="btn btn-primary btn-block"
+                        type="submit"
+                      >
                         Register
                       </button>
                     </div>
