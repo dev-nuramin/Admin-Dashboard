@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-
+import "boxicons/css/boxicons.min.css"
 const Sidebar = () => {
   return (
     <>
@@ -19,6 +19,16 @@ const Sidebar = () => {
                 <li className="">
                   <Link to="/user">
                     <i className="fe fe-user"></i> <span>User</span>
+                  </Link>
+                </li>
+                <li className="">
+                  <Link to="/role">
+                  <i className='bx bx-anchor'></i> <span>Role</span>
+                  </Link>
+                </li>
+                <li className="">
+                  <Link to="/permission">
+                    <i className="bx bx-lock-alt"></i> <span>Permission</span>
                   </Link>
                 </li>
               </ul>

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import patients from "../../assets/img/patients/patient1.jpg";
 import doctor from "../../assets/img/doctors/doctor-thumb-01.jpg";
-import ModalPopup from "../ModalPopup/ModalPopup";
 import DataTable from "datatables.net-dt";
-import PageHeader from "../PageHeader/PageHeader";
+import PageHeader from "../../components/PageHeader/PageHeader";
+import ModalPopup from "../../components/ModalPopup/ModalPopup";
 
-const User = () => {
+
+const Role = () => {
   
   useEffect(() => {
     new DataTable(".datatable");
@@ -15,22 +16,22 @@ const User = () => {
     
     <>
     
-      <ModalPopup target="userModalPopup" title="Add specialist">
+      <ModalPopup target="roleModalPopup" title="Add specialist">
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum,
           aliquam.
         </p>
       </ModalPopup>
-      <PageHeader title="user"/>
+      <PageHeader title="Role"/>
 
       <div className="row">
         <div className="col-md-12">
           <button
             className="btn btn-info my-3"
-            data-target="#userModalPopup"
+            data-target="#roleModalPopup"
             data-toggle="modal"
           >
-            Add new
+            Add new role
           </button>
 
           <div className="card card-table">
@@ -61,7 +62,7 @@ const User = () => {
                             <img
                               className="avatar-img rounded-circle"
                               src={doctor}
-                              alt="User Image"
+                              alt="Role Image"
                             />
                           </a>
                           <a href="profile.html">Dr. Ruby Perrin</a>
@@ -74,7 +75,7 @@ const User = () => {
                             <img
                               className="avatar-img rounded-circle"
                               src={patients}
-                              alt="User Image"
+                              alt="Role Image"
                             />
                           </a>
                           <a href="">Charlene Reed </a>
@@ -111,7 +112,7 @@ const User = () => {
                             <img
                               className="avatar-img rounded-circle"
                               src={doctor}
-                              alt="User Image"
+                              alt="Role Image"
                             />
                           </a>
                           <a href="profile.html">Dr. Ruby Perrin</a>
@@ -124,7 +125,7 @@ const User = () => {
                             <img
                               className="avatar-img rounded-circle"
                               src={patients}
-                              alt="User Image"
+                              alt="Role Image"
                             />
                           </a>
                           <a href="">Charlene Reed </a>
@@ -161,7 +162,7 @@ const User = () => {
                             <img
                               className="avatar-img rounded-circle"
                               src={doctor}
-                              alt="User Image"
+                              alt="Role Image"
                             />
                           </a>
                           <a href="profile.html">Dr. Ruby Perrin</a>
@@ -174,7 +175,7 @@ const User = () => {
                             <img
                               className="avatar-img rounded-circle"
                               src={patients}
-                              alt="User Image"
+                              alt="Role Image"
                             />
                           </a>
                           <a href="">Charlene Reed </a>
@@ -211,7 +212,7 @@ const User = () => {
                             <img
                               className="avatar-img rounded-circle"
                               src={doctor}
-                              alt="User Image"
+                              alt="Role Image"
                             />
                           </a>
                           <a href="profile.html">Dr. Ruby Perrin</a>
@@ -224,7 +225,7 @@ const User = () => {
                             <img
                               className="avatar-img rounded-circle"
                               src={patients}
-                              alt="User Image"
+                              alt="Role Image"
                             />
                           </a>
                           <a href="">Charlene Reed </a>
@@ -261,7 +262,7 @@ const User = () => {
                             <img
                               className="avatar-img rounded-circle"
                               src={doctor}
-                              alt="User Image"
+                              alt="Role Image"
                             />
                           </a>
                           <a href="profile.html">Dr. Ruby Perrin</a>
@@ -274,7 +275,7 @@ const User = () => {
                             <img
                               className="avatar-img rounded-circle"
                               src={patients}
-                              alt="User Image"
+                              alt="Role Image"
                             />
                           </a>
                           <a href="">Charlene Reed </a>
@@ -311,7 +312,7 @@ const User = () => {
                             <img
                               className="avatar-img rounded-circle"
                               src={doctor}
-                              alt="User Image"
+                              alt="Role Image"
                             />
                           </a>
                           <a href="profile.html">Dr. Ruby Perrin</a>
@@ -324,7 +325,7 @@ const User = () => {
                             <img
                               className="avatar-img rounded-circle"
                               src={patients}
-                              alt="User Image"
+                              alt="Role Image"
                             />
                           </a>
                           <a href="">Charlene Reed </a>
@@ -361,7 +362,7 @@ const User = () => {
                             <img
                               className="avatar-img rounded-circle"
                               src={doctor}
-                              alt="User Image"
+                              alt="Role Image"
                             />
                           </a>
                           <a href="profile.html">Dr. Ruby Perrin</a>
@@ -374,7 +375,7 @@ const User = () => {
                             <img
                               className="avatar-img rounded-circle"
                               src={patients}
-                              alt="User Image"
+                              alt="Role Image"
                             />
                           </a>
                           <a href="">Charlene Reed </a>
@@ -414,4 +415,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default Role;

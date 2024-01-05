@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import white_logo from "../../assets/img/logo-white.png";
 import { useDispatch, useSelector } from "react-redux";
 import { userRegisterSlice } from "../../Redux/Features/auth/authApiSlice";
@@ -10,6 +10,7 @@ const Register = () => {
   // call use dispatch foe data fetching with axios
   const dispatch = useDispatch();
   const { error, message } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
   // get input field data
   const [input, setInput] = useState({
     email: "",
@@ -31,16 +32,11 @@ const Register = () => {
     e.preventDefault();
 
     if (!input.name || !input.email || !input.password || !input.cpassword) {
-      sweetAlertStandard(
-        { title: "Heads Up!", msg: "all fields are required" },
-        "warning"
-      );
+     
+      // createToast('All fields are required', 'error')
     }
     if (input.password !== input.cpassword) {
-      sweetAlertStandard(
-        { title: "Check password", msg: "Password not match" },
-        "info"
-      );
+      createToast('Password not match', 'error')
     } else {
       dispatch(
         userRegisterSlice({
@@ -54,7 +50,8 @@ const Register = () => {
           password: "",
           name: "",
           cpassword: "",
-        })
+        }),
+        navigate('/login')
       );
     }
   };
@@ -65,7 +62,7 @@ const Register = () => {
       dispatch(setMessageEmpty());
     }
     if (message) {
-      createToast(message);
+      createToast(message, 'success');
       dispatch(setMessageEmpty());
     }
   }, [error, message]);

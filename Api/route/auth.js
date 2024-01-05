@@ -1,5 +1,6 @@
 import express from "express";
-import { login, logout, registar } from "../controllers/authController.js";
+import { login, logout, registar, loggedInUser } from "../controllers/authController.js";
+import tokenVerify from "../middlewares/verifyToken.js";
 
 
 const router = express.Router();
@@ -11,5 +12,7 @@ router.route("/logout").post(logout);
 router.route("/registar").post(registar);
 
 
+// personal route
+router.get('/me', tokenVerify, loggedInUser)
 // export default router
 export default router;

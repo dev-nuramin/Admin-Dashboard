@@ -45,11 +45,18 @@ export const login = asyncHandler(async (req, res) => {
   });
 
   // set cookie
-  res.cookie("accessToken", tokenUser);
+  res.cookie("accessToken", tokenUser, {
+    httpOnly : true,
+    path: '/',
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    secure: process.env.APP_ENV === "Development" ? false : true,
+    sameSite: "strict"
+  });
 
   res.status(200).json({
-    loggingUser,
+    user: loggingUser,
     tokenUser,
+    message: "User loggin succesful"
   });
 });
 
@@ -95,3 +102,15 @@ export const registar = asyncHandler(async (req, res) => {
 
   res.status(200).json({ user, message: "User created successfully" });
 });
+
+/***
+ * @DESC Create me
+ * @ROUTE /api/v1/auth/me
+ * @method Get
+ * @access public
+ */
+export const loggedInUser = asyncHandler(async(req, res) => {
+  res.status(200).json(req.me)
+})
+
+

@@ -1,5 +1,6 @@
 
 import swal from 'sweetalert';
+
 // create sweet alert
  export const sweetAlertBasic = (msg) => {
   swal(msg)

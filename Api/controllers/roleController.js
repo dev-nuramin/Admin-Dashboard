@@ -11,9 +11,15 @@ import { createSlug } from "../helper/slug.js";
 export const getAllRole = asyncHandler(async (req, res) => {
   const roles = await Role.find();
 
+
+  if(!roles){
+    res.status(404).json({message: "Role not found"})
+  }
+
   if (roles.length > 0) {
     res.status(200).json(roles);
   }
+//  console.log(res.send("Helllo"))
 });
 
 /**

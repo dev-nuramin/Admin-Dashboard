@@ -1,21 +1,60 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import white_logo from "../../assets/img/logo-white.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { createToast } from "../../utils/createToast";
+import { useDispatch, useSelector } from "react-redux";
+import { loginSlice } from "../../Redux/Features/auth/authApiSlice";
+import { setMessageEmpty } from "../../Redux/Features/auth/authSlice";
+
 const Login = () => {
+  // call dispatch for fetching data from server
+  const dispatch = useDispatch();
+  const { error, message, user } = useSelector((state) => state.auth);
+ console.log(user)
+  const navigate = useNavigate();
 
   // get input field data
   const [input, setInput] = useState({
-    email : '',
-    password : ''
+    email: "",
+    password: "",
   });
-
+ 
   // confirm get input data and ready to send server
-const  handleInputChange = (e) => {
- setInput((prevState) => ({
-  ...prevState,
-  [e.target.name]: e.target.value
- }))
-}
+  const handleInputChange = (e) => {
+    setInput((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  // handle submit form
+  const handleSubitLoginForm = (e) => {
+    e.preventDefault();
+
+    if (!input.email || !input.password) {
+      createToast("All fields are required");
+    } else {
+      dispatch(loginSlice(input));
+    }
+  };
+
+  // sending message to ui from ux
+  useEffect(() => {
+    if (error) {
+      createToast(error);
+      dispatch(setMessageEmpty());
+    }
+    if (message) {
+      createToast(message, "success");
+      dispatch(setMessageEmpty());
+    }
+
+    //  navigate to home page
+   if(user){
+    navigate("/")
+   }
+  }, [error, message, user]);
+
   return (
     <>
       <div className="main-wrapper login-body">
@@ -31,7 +70,7 @@ const  handleInputChange = (e) => {
                   <p className="account-subtitle">Access to our dashboard</p>
 
                   {/* <!-- Form --> */}
-                  <form action="https://dreamguys.co.in/demo/doccure/admin/index.html">
+                  <form onSubmit={handleSubitLoginForm}>
                     <div className="form-group">
                       <input
                         className="form-control"
@@ -64,7 +103,12 @@ const  handleInputChange = (e) => {
                   {/* form */}
 
                   <div className="text-center forgotpass">
-                    <Link to="/forgot-password" onClick={() => handlealert(alert('Hello'))}>Forgot Password?</Link>
+                    <Link
+                      to="/forgot-password"
+                      onClick={() => handlealert(alert("Hello"))}
+                    >
+                      Forgot Password?
+                    </Link>
                   </div>
                   <div className="login-or">
                     <span className="or-line"></span>

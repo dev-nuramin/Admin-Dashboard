@@ -16,6 +16,7 @@ export const getAllPermission = asyncHandler(async (req, res) => {
   }
 
   res.status(200).json(permissions);
+ 
 });
 
 /**
@@ -111,6 +112,7 @@ export const updatePermission = asyncHandler(async (req, res) => {
     id,
     {
       name,
+      slug: createSlug(name)
     },
     { new: true }
   );
