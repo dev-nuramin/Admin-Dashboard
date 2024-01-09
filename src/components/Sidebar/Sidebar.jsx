@@ -17,6 +17,26 @@ const Sidebar = () => {
                   </Link>
                 </li>
                 <li className="">
+                  <Link to="/">
+                    <i className="fe fe-bolt"></i> <span>Products</span>
+                  </Link>
+                </li>
+                <li className="">
+                  <Link to="/">
+                    <i className="fe fe-bolt"></i> <span>Brands</span>
+                  </Link>
+                </li>
+                <li className="">
+                  <Link to="/">
+                    <i className="fe fe-bolt"></i> <span>Tags</span>
+                  </Link>
+                </li>
+                <li className="">
+                  <Link to="/">
+                    <i className="fe fe-bolt"></i> <span>Category</span>
+                  </Link>
+                </li>
+                <li className="">
                   <Link to="/user">
                     <i className="fe fe-user"></i> <span>User</span>
                   </Link>
