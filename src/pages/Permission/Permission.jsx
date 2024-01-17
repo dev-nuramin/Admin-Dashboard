@@ -13,10 +13,13 @@ import {
 import {
   createPermission,
   deletePermission,
-  getUserPermission,
+  updatePermissionStatus,
 } from "../../Redux/Features/user/userApiSlice";
 import { createToast } from "../../utils/createToast";
-import swal from 'sweetalert';
+import swal from "sweetalert";
+import { timeAgo } from "../../utils/timesAgoFunc";
+
+
 const Permission = () => {
   // sent data to backend server
   const dispatch = useDispatch();
@@ -28,7 +31,6 @@ const Permission = () => {
     name: "",
   });
 
-  // console.log(input);
   // handle state changes
   const handleInputChange = (e) => {
     setInput((prevState) => ({
@@ -37,7 +39,7 @@ const Permission = () => {
     }));
   };
 
-  // handle slert message
+  // handle set alert message
 
   useEffect(() => {
     if (error) {
@@ -59,30 +61,29 @@ const Permission = () => {
     });
   };
 
-  //useeffect for rendering all data
-  useEffect(() => {
-    dispatch(getUserPermission());
-  }, [dispatch]);
-
+ 
 
   // handle delete item
   const handleDeletePer = (id) => {
     swal({
       title: "Are you sure",
-      text: 'This will delete your data',
+      text: "This will delete your data",
       icon: "warning",
       buttons: true,
       dangerMode: true,
-    })
-    .then((willDelete) => {
+    }).then((willDelete) => {
       if (willDelete) {
-        dispatch(deletePermission(id))
+        dispatch(deletePermission(id));
       } else {
         swal("Your imaginary file is safe!");
       }
     });
-    
-  }
+  };
+
+  // update permission status
+  const handleUpdateStatus = (status, id) => {
+    dispatch(updatePermissionStatus({ status, id }));
+  };
   // display data table
   useEffect(() => {
     new DataTable(".datatable");
@@ -127,37 +128,40 @@ const Permission = () => {
             </div>
             <div className="card-body">
               <div className="table-responsive">
-                <table className="table table-hover table-center mb-0 datatable">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Name</th>
-                      <th>Slug</th>
-                      <th>Permission</th>
-                      <th>Edit at</th>
-                      <th>Status</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="text-bold">
-                    {permission &&
-                      [...permission].reverse().map((item, index) => {
+                {permission && (
+                  <table className="table table-hover table-center mb-0 datatable">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Slug</th>
+                        <th>Permission</th>
+                        <th>Edit at</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-bold">
+                      {[...permission].reverse().map((item, index) => {
                         return (
                           <tr key={index}>
                             <td>{index + 1}</td>
                             <td>{item.name}</td>
                             <td>{item.slug}</td>
                             <td>Admin</td>
-                            <td>3 min ago</td>
+                            <td>{timeAgo(item.createdAt)}</td>
                             <td>
                               <div className="status-toggle">
                                 <input
                                   type="checkbox"
                                   id="status_1"
                                   className="check"
-                                  checked
+                                  checked={item.status ? true : false}
                                 />
                                 <label
+                                  onClick={() =>
+                                    handleUpdateStatus(item.status, item._id)
+                                  }
                                   htmlFor="status_1"
                                   className="checktoggle"
                                 >
@@ -166,15 +170,19 @@ const Permission = () => {
                               </div>
                             </td>
                             <td>
-                              <button className="btn btn-danger btn-sm" onClick={() => handleDeletePer(item._id)}>
+                              <button
+                                className="btn btn-danger btn-sm"
+                                onClick={() => handleDeletePer(item._id)}
+                              >
                                 <i className="fe fe-trash"></i>
                               </button>
                             </td>
                           </tr>
                         );
                       })}
-                  </tbody>
-                </table>
+                    </tbody>
+                  </table>
+                )}
               </div>
             </div>
           </div>

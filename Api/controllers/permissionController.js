@@ -136,7 +136,7 @@ export const updatePermissionStatus = asyncHandler(async (req, res) => {
   const permission = await Permission.findByIdAndUpdate(
     id,
     {
-      status,
+      status : !status,
     },
     { new: true }
   );

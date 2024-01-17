@@ -3,8 +3,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   createPermission,
+  createRole,
   deletePermission,
   getUserPermission,
+  getUserRoles,
+  updatePermissionStatus,
 } from "./userApiSlice";
 
 const userSlice = createSlice({
@@ -44,6 +47,30 @@ const userSlice = createSlice({
         state.permission = state.permission.filter(
           (data) => data._id !== action.payload.permission._id
         );
+        state.message = action.payload.message;
+      })
+      .addCase(updatePermissionStatus.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(updatePermissionStatus.fulfilled, (state, action) => {
+        (state.permission[
+          state.permission.findIndex(
+            (data) => data._id === action.payload.permission._id
+          )
+        ] = action.payload.permission),
+          (state.message = action.payload.message);
+      })
+      .addCase(getUserRoles.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(getUserRoles.fulfilled, (state, action) => {
+        state.role = action.payload;
+      })
+      .addCase(createRole.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(createRole.fulfilled, (state, action) => {
+        state.role.push(action.payload.role);
         state.message = action.payload.message;
       });
   },

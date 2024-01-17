@@ -38,7 +38,7 @@ export const createPermission = createAsyncThunk(
   }
 );
 
-// create user permission slice
+// delete user permission slice
 export const deletePermission = createAsyncThunk(
   "user/deletePermission",
   async (id) => {
@@ -46,6 +46,61 @@ export const deletePermission = createAsyncThunk(
       const response = await axios.delete(
         `http://localhost:5050/api/v1/permission/${id}`,
         
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+// update user permission status slice
+export const updatePermissionStatus = createAsyncThunk(
+  "user/updatePermissionStatus",
+  async ({status, id}) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:5050/api/v1/permission/status/${id}`,
+         {status},
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+// get all user role slice
+export const getUserRoles = createAsyncThunk(
+  "user/getUserRoles",
+  async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5050/api/v1/role",
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+// create user role slice
+export const createRole = createAsyncThunk(
+  "user/createRole",
+  async (data) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5050/api/v1/role",
+        data,
         {
           withCredentials: true,
         }
