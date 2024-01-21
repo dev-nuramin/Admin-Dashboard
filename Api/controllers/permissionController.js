@@ -11,11 +11,11 @@ import { createSlug } from "../helper/slug.js";
 export const getAllPermission = asyncHandler(async (req, res) => {
   const permissions = await Permission.find();
 
-  if (permissions.length === 0) {
-    return res.status(404).json({ message: "Permission data not found" });
+  if (permissions.length > 0) {
+    res.status(200).json(permissions);
   }
 
-  res.status(200).json(permissions);
+  
  
 });
 

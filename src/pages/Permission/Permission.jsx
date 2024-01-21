@@ -42,7 +42,7 @@ const Permission = () => {
   // handle set alert message
 
   useEffect(() => {
-    if (error) {
+    if (error && permission) {
       createToast(error);
       dispatch(setMessageEmpty());
     }
@@ -135,7 +135,7 @@ const Permission = () => {
                         <th>#</th>
                         <th>Name</th>
                         <th>Slug</th>
-                        <th>Permission</th>
+                        <th>Created at</th>
                         <th>Edit at</th>
                         <th>Status</th>
                         <th>Actions</th>
@@ -148,8 +148,8 @@ const Permission = () => {
                             <td>{index + 1}</td>
                             <td>{item.name}</td>
                             <td>{item.slug}</td>
-                            <td>Admin</td>
                             <td>{timeAgo(item.createdAt)}</td>
+                            <td>{timeAgo(item.updatedAt)}</td>
                             <td>
                               <div className="status-toggle">
                                 <input

@@ -5,8 +5,11 @@ import {
   createPermission,
   createRole,
   deletePermission,
+  deleteRole,
+  editRole,
   getUserPermission,
   getUserRoles,
+  roleStatusUpdate,
   updatePermissionStatus,
 } from "./userApiSlice";
 
@@ -37,6 +40,7 @@ const userSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(createPermission.fulfilled, (state, action) => {
+        state.permission = state.permission ?? [];
         state.permission.push(action.payload.permission),
           (state.message = action.payload.message);
       })
@@ -70,9 +74,39 @@ const userSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(createRole.fulfilled, (state, action) => {
+        state.role = state.role ?? [];
         state.role.push(action.payload.role);
         state.message = action.payload.message;
-      });
+      })
+      .addCase(editRole.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(editRole.fulfilled, (state, action) => {
+        state.role[
+          state.role.findIndex((data) => data._id === action.payload.role._id)
+        ] = action.payload.role;
+        state.message = action.payload.message;
+      })
+      .addCase(roleStatusUpdate.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(roleStatusUpdate.fulfilled, (state, action) => {
+        state.role[
+          state.role.findIndex((data) => data._id === action.payload.role._id)
+        ] = action.payload.role;
+        state.message = action.payload.message;
+      })
+      .addCase(deleteRole.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(deleteRole.fulfilled, (state, action) => {
+        state.role = state.role.filter(
+          (data) => data._id !== action.payload.role._id
+        );
+        state.message = action.payload.message;
+      })
+      
+      ;
   },
 });
 

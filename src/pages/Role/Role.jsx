@@ -12,14 +12,14 @@ import "../Permission/Permission.css";
 import { timeAgo } from "../../utils/timesAgoFunc";
 import useFormFields from "../../hooks/useFormFields";
 import { createToast } from "../../utils/createToast";
-import { createRole } from "../../Redux/Features/user/userApiSlice";
+import { createRole, deleteRole, editRole, roleStatusUpdate} from "../../Redux/Features/user/userApiSlice";
 
 const Role = () => {
-  const {permission, role, error, message } = useSelector(getAllPermission);
+  const { permission, role, error, message } = useSelector(getAllPermission);
 
   const dispatch = useDispatch();
 
-  const { input, handleInputChange,clearForms } = useFormFields({
+  const { input, handleInputChange, clearForms } = useFormFields({
     name: "",
   });
 
@@ -54,13 +54,68 @@ const Role = () => {
 
   // create role handler
   const handleCreateRole = (e) => {
-   e.preventDefault()
-   dispatch(createRole({
-    name: input.name,
-    permissions: [...selected]
-   }));
-   clearForms(),
-   setSelected([])
+    e.preventDefault();
+    dispatch(
+      createRole({
+        name: input.name,
+        permissions: [...selected],
+      })
+    );
+    clearForms(), setSelected([]);
+  };
+
+  // edit role start
+  // edit permission from modal
+  const [roleEdit, setRoleEdit] = useState({});
+
+  // geting id for edit permission
+  const handleInputEditChange = (id) => {
+    const editData = role.find((user) => user._id === id);
+    setRoleEdit(editData);
+    setSelected(editData.permissions)
+  };
+
+  // input fields data change
+  const handleEditInputChange = (e) => {
+    setRoleEdit((prevState) => (
+      {
+        ...prevState,
+        [e.target.name]: e.target.value
+      }
+    ))
+  };
+
+  const handleUpdateRole = (e) => {
+    e.preventDefault();
+   
+    dispatch(editRole({
+      id: roleEdit._id,
+      name: roleEdit.name,
+      permissions: selected
+    }))
+  }
+  //Edit role End
+  // update status start
+  const handleUpdateStatus = (status, id) => {
+    dispatch(roleStatusUpdate({status, id}))
+   
+  };
+  // updat status end
+  //delete role start
+  const handleDeleteRole = (id) => {
+    swal({
+      title: "Are you sure",
+      text: "This will delete your data",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        dispatch(deleteRole(id));
+      } else {
+        swal("Your imaginary file is safe!");
+      }
+    });
   }
   // rendered data table
   useEffect(() => {
@@ -90,7 +145,7 @@ const Role = () => {
                   <input
                     type="checkbox"
                     value={item.name}
-                    checked={selected.includes(item.name)}
+                    checked={selected?.includes(item.name)}
                     onClick={handleCheckUncheckList}
                   />{" "}
                   {item.name}
@@ -100,6 +155,44 @@ const Role = () => {
           </label>
           <button type="submit" className="btn btn-primary btn-block">
             Add new Permission
+          </button>
+        </form>
+      </ModalPopup>
+
+      {/* Edit permission popup */}
+
+      <ModalPopup target="roleEdit" title="Edit specialist">
+        <form onSubmit={handleUpdateRole}>
+          <label htmlFor="Role Name ">
+            <div className="my-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Role Name"
+                name="name"
+                value={roleEdit.name}
+                onChange={handleEditInputChange}
+              />
+            </div>
+            <h5>Permission</h5>
+            <hr />
+            {permission?.map((item, index) => {
+              return (
+                <label className="d-block" key={index}>
+                  <input
+                   style={{cursor: "pointer"}}
+                    type="checkbox"
+                    value={item.name}
+                    checked={selected.includes(item.name)}
+                    onClick={handleCheckUncheckList}
+                  />{" "}
+                  {item.name}
+                </label>
+              );
+            })}
+          </label>
+          <button type="submit" className="btn btn-primary btn-block">
+            Edit role
           </button>
         </form>
       </ModalPopup>
@@ -130,6 +223,7 @@ const Role = () => {
                         <th>Slug</th>
                         <th>Role</th>
                         <th>Created at</th>
+                        <th>Edited at</th>
                         <th>Status</th>
                         <th>Action</th>
                       </tr>
@@ -141,18 +235,26 @@ const Role = () => {
                             <td>{index + 1}</td>
                             <td>{data.name}</td>
                             <td>{data.slug}</td>
-                            <td>Admin</td>
+                            <td>
+                              <ul style={{ listStyle: "none" }}>
+                                {data.permissions.map((item, index) => {
+                                  return <li key={index}>{item}</li>;
+                                })}
+                              </ul>
+                            </td>
 
                             <td>{timeAgo(data.createdAt)}</td>
+                            <td>{timeAgo(data.updatedAt)}</td>
                             <td>
                               <div className="status-toggle">
                                 <input
                                   type="checkbox"
                                   id="status_1"
                                   className="check"
-                                  checked={true}
+                                  checked={data.status ? true : false}
                                 />
                                 <label
+                                 onClick={() => handleUpdateStatus(data.status, data._id)}
                                   htmlFor="status_1"
                                   className="checktoggle"
                                 >
@@ -161,7 +263,17 @@ const Role = () => {
                               </div>
                             </td>
                             <td>
-                              <button className="btn btn-danger btn-sm">
+                              <button
+                                className="btn btn-warning btn-sm mr-1"
+                                data-toggle="modal"
+                                data-target="#roleEdit"
+                                onClick={() => handleInputEditChange(data._id)}
+                              >
+                                <i className="fe fe-edit"></i>
+                              </button>
+                              <button className="btn btn-danger btn-sm"
+                              onClick={() => handleDeleteRole(data._id)}
+                              >
                                 <i className="fe fe-trash"></i>
                               </button>
                             </td>
